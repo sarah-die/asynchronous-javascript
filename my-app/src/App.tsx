@@ -2,31 +2,28 @@ import React from "react";
 import "./App.css";
 
 function App() {
-  const getTodos = (callback: (error: string | undefined, data: any) => void) => {
-    const request = new XMLHttpRequest();
+  // all asynchronous code in this async function
+  // async functions returnen immer ein Promise unabhängig vom Inhalt
+  // async-Functions are non-blocking
+  const getTodos = async () => {
+    // await ersetzt das .then, wenn ein Promise (hier von fetch) zurückgegeben wird
+    // response wird erst ein Wert zugewiesen, wenn die Promise resolved ist
+    const response = await fetch("https://jsonplaceholder.typicode.com/todos/"); // reponse = response-object
 
-    request.addEventListener("readystatechange", () => {
-      if (request.readyState === 4 && request.status === 200) {
-        const data = JSON.parse(request.responseText);
-        callback(undefined, data);
-      } else if (request.readyState === 4) {
-        callback("could not fetch data", undefined);
-      }
-    });
+    // wenn promise resolves aber dennoch ein Fehler, zb beim Namen der Quelle vorliegt, dann hier den Fehler abfangen
+    // wenn ein Error in einer async-function geworfen wird, dann ist der Promise dieser rejected
+    if (response.status !== 200) {
+      throw new Error("Cannot fetch the data");
+    }
 
-    // change url to my todos.json
-    request.open("GET", "https://jsonplaceholder.typicode.com/todos/");
-    request.send();
+    const data = await response.json(); // await, weil .json ein promise zurückgibt -> es wird gewartet bis die Promise resolved ist
+    return data;
   };
 
-  getTodos((error, data) => {
-    console.log("callback fired");
-    if (error) {
-      console.log(error);
-    } else {
-      console.log(data);
-    }
-  });
+  // dieser Code ist nun non-blocking ABER returned immer noch ein Promise
+  getTodos()
+    .then((data) => console.log("resolved:", data))
+    .catch((error) => console.log("rejected", error.message)); // for rejections
 
   return (
     <div>
