@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import "./App.css";
 
 function App() {
@@ -22,9 +22,22 @@ function App() {
   };
 
   // dieser Code ist nun non-blocking ABER returned immer noch ein Promise
-  getTodos()
-    .then((data) => console.log("resolved:", data))
-    .catch((error) => console.log("rejected", error.message)); // for rejections
+  // getTodos()
+  //   .then((data) => console.log("resolved:", data))
+  //   .catch((error) => console.log("rejected", error.message)); // for rejections
+
+  // react version
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const data = await getTodos();
+        setData(data);
+      } catch (e: any) {
+        console.error(e.message);
+      }
+    };
+    fetch();
+  }, []);
 
   return (
     <div>
