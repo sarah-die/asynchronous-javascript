@@ -1,11 +1,8 @@
 import React from "react";
-import "./App.css";
+import "../App.css";
 
-function AppKapitel5bis6() {
-  const getTodos = (
-    resource: string,
-    callback: (error: string | undefined, data: any) => void
-  ) => {
+function AppKapitel4() {
+  const getTodos = (callback) => {
     const request = new XMLHttpRequest();
 
     request.addEventListener("readystatechange", () => {
@@ -17,12 +14,18 @@ function AppKapitel5bis6() {
       }
     });
 
-    // change url to my todos.json
     request.open("GET", "https://jsonplaceholder.typicode.com/todos/");
     request.send();
   };
 
-  getTodos("resource", (error, data) => {
+  // this is non-blocking asynchronous code that starts now and finishes later
+  // console: 1, 2, 3, 4, callback fired, data
+  console.log(1);
+  console.log(2);
+
+  // specify callback function (arrow function) as an argument to get todos
+  // callback function convention: (error, data) => {}
+  getTodos((error, data) => {
     console.log("callback fired");
     if (error) {
       console.log(error);
@@ -31,17 +34,8 @@ function AppKapitel5bis6() {
     }
   });
 
-  // chapter 6: Callback hell, unüberschaubar, schwer zu pflegen
-  // Code bewirkt, dass, nachdem json1 geladen worden ist, json2 geladen wird, ...
-  // getTodos("json1.json", (error, data) => {
-  //   console.log(data);
-  //   getTodos("json2.json", (error, data) => {
-  //     console.log(data);
-  //     getTodos("json3.json", (error, data) => {
-  //       console.log(data);
-  //     });
-  //   });
-  // });
+  console.log(3);
+  console.log(4);
 
   return (
     <div>
@@ -50,4 +44,4 @@ function AppKapitel5bis6() {
   );
 }
 
-export default AppKapitel5bis6;
+export default AppKapitel4;
