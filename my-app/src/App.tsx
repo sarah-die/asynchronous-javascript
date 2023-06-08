@@ -12,6 +12,7 @@ function App() {
 
     // wenn promise resolves aber dennoch ein Fehler, zb beim Namen der Quelle vorliegt, dann hier den Fehler abfangen
     // wenn ein Error in einer async-function geworfen wird, dann ist der Promise dieser rejected
+    // Alternativ: reponse.ok abgleichen
     if (response.status !== 200) {
       throw new Error("Cannot fetch the data");
     }
